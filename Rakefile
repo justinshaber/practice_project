@@ -1,5 +1,6 @@
 require 'rake/testtask'
 require 'find'
+require "bundler/gem_tasks"
 
 desc 'Run tests'
 task :default => :test
@@ -23,15 +24,23 @@ end
 desc 'lists every file except .'
 task :list_files do
   results = []
-  Find.find(ENV["/Users/justinshaber/coding_projects/practice_project"]) do |path|
-    if FileTest.directory?(path)
-      if File.basename(path).start_with?('.')
-        Find.prune       # Don't look any further into this directory.
-      else
-        next
-      end
-    else
-      results << path
-    end
+  Find.find("/Users/justinshaber/coding_projects/practice_project") do |path|
+    # if FileTest.directory?(path)
+    #   if File.basename(path).start_with?('.')
+    #     Find.prune       # Don't look any further into this directory.
+    #   else
+    #     next
+    #   end
+    # else
+    #   if File.basename(path).start_with?('.')
+    #     next
+    #   else
+    #     results << path
+    #   end
+    # end
+
+    next if path.include?('/.')
+    results << path if File.file?(path)
   end
+  puts results
 end
